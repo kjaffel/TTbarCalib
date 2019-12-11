@@ -240,7 +240,6 @@ python twoTag.py /tmp/MYUSERNAME/Moriond19_Run2018/plots/plotter.root
 - Don't forget to split your ttbar sample to ensure you don't overtrain your classifier.
 - The number of events used in the training has been optimised to get the best separation between signal and background while maintaining a flat background.
 - One must be aware that changing this number can change the shape of the kinematic discriminant.
-
 ### Re-running flat ntuples to add mva training to TTrees
 ```
  python runTTbarAnalysis.py -i /store/group/phys_btag/Commissioning/TTbar/<ntuples_directory> -o <output_directory> -j data/<samples_list>.json --tmvaWgts data/KIN/ -n 4 
@@ -249,22 +248,18 @@ python twoTag.py /tmp/MYUSERNAME/Moriond19_Run2018/plots/plotter.root
 - Make sure that the number of root files equals the num of ntuples.
 - Sometimes this is needed because the process ntuples->analysis root file breaks.
 - Need to be careful about the number of nodes you run jobs on. If you use too many it can cause a errors and result in corrupt files..
-
 ### Control plots
-
  ```
-python plotter.py -i output_ntuples_outTheBoxCode_MVA/ -j data/samples_Run2017_prelim_4plotter.json
+      python plotter.py -i <output directory> -j data/<samples 4 plotter>.json
 ```
  - Makes control plots and stores all in a ROOT file. Different options may be passed to filter plots, and show differently the plots.
 - When merging rootples, be careful because if different sample names are called similarly (eg tW and atW)  you can risk doing double-merging.
 - When scaling to a given luminosity (--lumi) ensure that you enter the luminosity in inverse picobarns i.e. 1000 pb-1 not 1 fb-1.
-
 ### Taggers
 - The tagger json e.g. taggers_Run2017.json, can be found in the data directory.
 - This file contains all the information on the taggers and working points you want to derive scale factors for.
 - The current naming convention matches the code, if you want to change this you must ensure this is changed in all other relevant files.
 - The working points are updated most campaigns so ensure you are synchronised with the other BTV calibration methods.
-
 ### Prepare and Perform Fit
 ```
 python Templated_btagEffFitter.py --taggers data/<taggers_WP>.json --inDir output_ntuples_RunBCDEFpuw_addDeepCSV_2018-01-17_MVA/ --outDir fit_dir -n 500
