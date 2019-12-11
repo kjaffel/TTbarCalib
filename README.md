@@ -5,12 +5,12 @@ The following instructions will explain practically how to perform the KIN metho
 ```
 https://twiki.cern.ch/twiki/bin/viewauth/CMS/BTagAnalyzer
 ```
+We first describe how to run the BTagAnalyzer creating ntuples for a TTbar analysis. It's not in the scope of this README to give detailed information on the BTagAnalyzer but one can find the relevant information following the twiki above or reading through the relevant code in that Git repository. These are what are then used as input to the TTbarCalib code used to create the flat ntuples. We then describe the two separate procedures that perform Kinematic fit method and the 2TagCount method. However, firstly you will need to know where to find the centrally produced datasets for the campaign you are about to embark upon.
 ## Using DAS
 CMS DAS service will help you to find the MC and data files for your scale factor campaign. Example command for Fall17 Production:
 ```
 das_client.py --query="dataset dataset=/*/RunIIFall17MiniAOD-94X_mc2017_realistic_v*/MINIAODSIM status=*" --limit=300
 ```
-
 ## MC Sample Cross-sections:
 Many of the samples have changed in various ways. For example, for ttbar samples we now have to use the samples where the ttbar events are divided up according to the decay of the W bosons. This means when we include the samples in the samples.json we need to calculate the cross-section for the process. The was done for the ttbar samples by taking the ttbar production XS from here: https://twiki.cern.ch/twiki/bin/view/LHCPhysics/TtbarNNLO#Top_quark_pair_cross_sections_at
 This was then multiplied by the branching fractions of the W boson taken from the PDG: http://pdg.lbl.gov/2017/tables/rpp2017-sum-gauge-higgs-bosons.pdf
@@ -22,7 +22,6 @@ XS ttbar AH = XS * (BR(hadronic) * BR(hadronic))
 364.35 = 831.76 * 2(  (10.80% + 10.80% + 10.80%) * 67.60% )
 
 For other samples, the cross-sections on the all new XSDB were used. May want to check TTbar XS. In DB the XS is much lower. This is due to it being automatically computed using the Event generator to NLO. The XS currently is from the latest and greatest NNLO calculation so is more 'correct'. New XS's for DY in XSDB are improved on previous iteration. Previously, just took the value from the event generator (which for madgraph MLM samples is NLO at best). New calculations are at least NLO (if not NNLO) so more accurate (tend to be larger).
-
 ### Measuring X-Sections of Samples on McM / DAS client
 See here for more detail:
 '''
@@ -51,27 +50,23 @@ Before matching = cross-section the output before any matching or filter.
 After matching = cross-section after matching but before filter.
 Filter efficiency = efficiency of any filter.
 After filter = final cross-section.
-
 ### Filter Efficiencies
-You can use the script from the twiki
+You can use the script from the twiki:
+'''
 https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideSubgroupMC#Measure_filter_efficiencies_and
-
-OR
-
-Just find your sample on McM e.g.
+'''
+or just find your sample on McM e.g.
+'''
 https://cms-pdmv.cern.ch/mcm/public/restapi/requests/get_test/B2G-RunIIFall17DRPremix-00045
-
-The find the associated wmLHEGS in the chain (I think you basically need the LHE fragments):
+'''
+To find the associated wmLHEGS in the chain (you basically need the LHE fragments):
+'''
 https://cms-pdmv.cern.ch/mcm/public/restapi/requests/get_test/B2G-RunIIFall17wmLHEGS-00071
-
-Click on the circle with the tick on it to get the test command. Copy and paste into a shell script and this should run.
-In the output look for the string "GenXsecAnalyzer".
-Below this you have a detailed logging of the needed quantities.
-
-##Creation of Ntuples
+'''
+Click on the circle with the tick on it to get the test command. Copy and paste into a shell script and this should run. In the output look for the string "GenXsecAnalyzer".
+## Creation of Ntuples Using the BTagAnalyzer
 ###Installation
 See base installation here https://twiki.cern.ch/twiki/bin/viewauth/CMS/BTagAnalyzer
-
 # ##Producing the trees locally
 Change into 'RecoBTag/PerformanceMeasurements/test/'. Then one can run:
 ```
@@ -89,7 +84,7 @@ cmsRun runBTagAnalyzer_cfg.py defaults=2016_SF runOnData=False miniAOD=True useT
 - The default sample the code will run on can be found in the defaults script. Depending on your analysis you may want to change this to a larger sample to perform tests.
 - Need to push TTbarSelectionProducer.cc edit to include PSWeights to git.
 
-### Running b-tag analyser on the grid
+### Running BTagAnalyzer on the grid
 Ensure you have a working CMSSW environment, you voms proxy set up and crab setup:
 ```
 cd CMSSW_XXXXX/src/
@@ -110,7 +105,7 @@ source /cvmfs/cms.cern.ch/crab3/crab.sh
 - Adjust —lfn as needed. 
 - Githash variable creates the folder where you save the crab output. You can change it into a more friendly name.
 
-### Copy trees
+### Copying trees
 ```
  source EosCpDir.sh //For MC samples source
 EosCpDirMuEG.sh //For data samples 
@@ -164,49 +159,35 @@ das_client.py --query="run dataset=/MuonEG/Run2017C-17Nov2017-v1/MINIAOD"
 '''
 Then just removed all other runs that werent in the list returned by the das query.
 
-## Creation of flat ntuples
-
-IMPORTANT: Split your ttbar sample to ensure you don't overtrain your classifier. For this you can use python script '/src/RecoBTag/PerformanceMeasurements/test/ttbar/scripts/xrdcp_script.py'
-WARNING!!!! When you split your ttbar samples up for training/testing BDT purposes, one must delete and remake the pickle files.
-Currently splits sample 50/50. Maybe need less for training?
-
+## Creation of flat ntuples using TTbarCalib package
+The creation of flat ntuples using the BTagAnalyzer outputs is done using the the runTTbarAnalysis.py script in the TTBarCalib package:
 ```
 python runTTbarAnalysis.py -i /store/group/phys_btag/Commissioning/TTbar/Moriond19_2018_StructuredDir/ -o Moriond19_19-01-24/ -j data/ttbarAnalyser_trainingsamples_Run2017_Summer18Campaign.json -n 50
 ```
+IMPORTANT: Split your ttbar sample to ensure you don't overtrain your classifier. For this you can use python script '/src/RecoBTag/PerformanceMeasurements/test/ttbar/scripts/xrdcp_script.py'
+When you split your ttbar samples up for training/testing BDT purposes, one must delete and remake the pickle files. Currently splits sample 50/50, could potentially use less for training.
 
-### TTbarCalib code
+### Introduction to TTbarCalib package
 - Runs local analysis to produce the root files used in the efficiency measurement. MC will be weighted by cross section here.
 - Option -n indicates how many threads should be used.  
-- The first time the script will produce a pickle file with the weights to be used according to the number of files found, xsec specified in the json file.
-- It is advised to run all samples on a single thread the first time you run (suggest running just one event) to create the aforementioned pickle files otherwise the code crashes (this part is not thread safe).
-- Once the pickle files have been created, you can run on multiple threads.
-- The inputs you need (from the BTagAnalyzer step) are usually stored somewhere in the common BTV eos space '/store/group/phys_btag/Commissioning/TTbar/'.
-- If you didn't run the BtagAnalyzer, ask whoever did for the path to the ttbar datasets.
-
+- The first time the script will produce a pickle file with the weights to be used according to the number of files found, xsec specified in the json file. It is advised to run all samples on a single thread the first time you run (suggest running just one event) to create the aforementioned pickle files otherwise the code crashes (this part is not thread safe). Once the pickle files have been created, you can run on multiple threads.
+- The inputs you need (from the BTagAnalyzer step) are usually stored somewhere in the common BTV eos space '/store/group/phys_btag/Commissioning/TTbar/'. If you didn't run the BtagAnalyzer, ask whoever did for the path to the ttbar datasets.
 - runTTbarAnalysis.py creates a TTbarEventAnalysis object.
-- Object defined in TTbarEventAnalysis.cc/.h
-- Runs a few functions to set values for e.g triggers/mva/etc.
-- Then runs sequence of functions: prepareOutput, processFile, finalizeOutput.
 - Output stored in directory named after '-o' command line option.
 - Input directory defined by '-i' option.
-- Runs on samples in .json file defined by -j option.
-
+- Samples used as input can be found in .json file defined by -j option.
 - StoreTools.py:
   produceNormalizationCache() function loops over a list of samples and produces a cache file to normalize MC.  
   getEOSlslist() function takes a directory on eos (starting from /store/...) and returns a list of all files with 'prepend' prepended.
   It prints out s.th. like "Produced normalization cache (data/.xsecweights.pck)" the first time you run and the pickle file takes a while.
   It seems that when you prepare the pickle file for the first time it is important to start with one MC sample only at the beginning and do not use -n (it may finish with seg fault but should still produce the pickle) or use -n 2.
   After the first MC sample is processed, you can use even higher -n (e.g. -n 8).
-
-Things to check:
 - Make sure that the number of root files equals the num of ntuple files. Sometimes this is needed, because the ntuples->rootfiles step fails.
-
-- If you update the ttrees at any point, the xsec or lumi you have to remove by hand the pickle file otherwise the necessary normalisations will not be recalculated accordingly and will be wrong. 
+- If you update the ttrees at any point, the xsec or lumi you have to remove by hand the pickle file otherwise the necessary normalisations will not be recalculated accordingly and will be wrong.:
 '''
 rm nohup.out
 rm data/.xsecweights.pck 
 '''
-
 - Check corrections are up-to-date in TTbarEventAnalysis code:
   - Check trigger and lepton SFs in TTbarEventAnalysis.cc.
   - Check values in getTriggerEfficiency() are up-to-date.
@@ -216,7 +197,6 @@ rm data/.xsecweights.pck 
   python calculate_EG_SFs.py > EG_mediumWP_eff_SFs.txt
   ```
   - Check values in TTbarEventAnalysis.cc: getJetResolutionScales() are up-to-date (https://twiki.cern.ch/twiki/bin/viewauth/CMS/JetResolution)
-
   - Instances of the JEC corrections and uncertainties can be found in TTbarEventAnalysis.h:
     Ensure latest and greatest object corrections e.g. /src/RecoBTag/PerformanceMeasurements/test/ttbar/data/Summer15_25nsV5_DATA_Uncertainty_AK4PFchs.txt
     Can get latest and greatest from https://github.com/cms-jet/JECDatabase/tree/master/textFiles/<version for your data>MC_Uncertainty_AK4PF.txt
