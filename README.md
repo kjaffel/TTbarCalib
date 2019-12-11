@@ -250,7 +250,8 @@ python twoTag.py /tmp/MYUSERNAME/Moriond19_Run2018/plots/plotter.root
 - Sometimes this is needed because the process ntuples->analysis root file breaks.
 - Need to be careful about the number of nodes you run jobs on. If you use too many it can cause a errors and result in corrupt files..
 
-## Control plots
+### Control plots
+
  ```
 python plotter.py -i output_ntuples_outTheBoxCode_MVA/ -j data/samples_Run2017_prelim_4plotter.json
 ```
@@ -258,7 +259,7 @@ python plotter.py -i output_ntuples_outTheBoxCode_MVA/ -j data/samples_Run2017_p
 - When merging rootples, be careful because if different sample names are called similarly (eg tW and atW)  you can risk doing double-merging.
 - When scaling to a given luminosity (--lumi) ensure that you enter the luminosity in inverse picobarns i.e. 1000 pb-1 not 1 fb-1.
 
-## Taggers
+### Taggers
 - The tagger json e.g. taggers_Run2017.json, can be found in the data directory.
 - This file contains all the information on the taggers and working points you want to derive scale factors for.
 - The current naming convention matches the code, if you want to change this you must ensure this is changed in all other relevant files.
