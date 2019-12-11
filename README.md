@@ -2,15 +2,15 @@
 ## Joshuha Thomas-Wilsker (IHEP CAS) & Chris Palmer (Princeton)
 
 The following instructions will explain practically how to perform the KIN method analysis. The instructions should provide you with all the information needed to go from collecting a list of samples required for this analysis and running the BTagAnalyzer to extracting the KIN method scale factors and uncertainties and creating the .csv files that are used in the BTV b-tagging scale factors combination. Firstly we need to create a CMSSW working directory and env. Check BTagAnalyzer page for which CMSSW to use for new campaigns and follow the setup instructions in the relevant github README:
-```
+'''
 https://twiki.cern.ch/twiki/bin/viewauth/CMS/BTagAnalyzer
-```
+'''
 We first describe how to run the BTagAnalyzer creating ntuples for a TTbar analysis. It's not in the scope of this README to give detailed information on the BTagAnalyzer but one can find the relevant information following the twiki above or reading through the relevant code in that Git repository. These are what are then used as input to the TTbarCalib code used to create the flat ntuples. We then describe the two separate procedures that perform Kinematic fit method and the 2TagCount method. However, firstly you will need to know where to find the centrally produced datasets for the campaign you are about to embark upon.
 ## Using DAS
 CMS DAS service will help you to find the MC and data files for your scale factor campaign. Example command for Fall17 Production:
-```
-das_client.py --query="dataset dataset=/*/RunIIFall17MiniAOD-94X_mc2017_realistic_v*/MINIAODSIM status=*" --limit=300
-```
+'''
+das_client.py --query="dataset dataset=/*/RunIIFall17MiniAOD-94X_mc2017_realistic_v*/MINIAODSIM status=* " --limit=300
+'''
 ## MC Sample Cross-sections:
 Many of the samples have changed in various ways. For example, for ttbar samples we now have to use the samples where the ttbar events are divided up according to the decay of the W bosons. This means when we include the samples in the samples.json we need to calculate the cross-section for the process. The was done for the ttbar samples by taking the ttbar production XS from here: https://twiki.cern.ch/twiki/bin/view/LHCPhysics/TtbarNNLO#Top_quark_pair_cross_sections_at
 This was then multiplied by the branching fractions of the W boson taken from the PDG: http://pdg.lbl.gov/2017/tables/rpp2017-sum-gauge-higgs-bosons.pdf
@@ -69,13 +69,13 @@ Click on the circle with the tick on it to get the test command. Copy and paste 
 See base installation here https://twiki.cern.ch/twiki/bin/viewauth/CMS/BTagAnalyzer
 # ##Producing the trees locally
 Change into 'RecoBTag/PerformanceMeasurements/test/'. Then one can run:
-```
+'''
 cmsRun runBTagAnalyzer_cfg.py defaults=<defaults_set_name> runOnData=<True/False> miniAOD=<True/False> useTTbarFilter=<True/False> maxEvents=<# of events (-1 for all)> groups=<Variable set to save>
-```
+'''
 e.g.
-```
+'''
 cmsRun runBTagAnalyzer_cfg.py defaults=2016_SF runOnData=False miniAOD=True useTTbarFilter=True maxEvents=100 groups='TTbar,JetInfo,PV,EventInfo,Josh'
-```
+'''
 - Will run locally the analyzer for testing purposes.
 - Note the way to initialise all the relevant defaults using defaults=XXXX
 - The defaults can be found in the folder: '/src/RecoBTag/PerformanceMeasurements/python/defaults/'.
@@ -86,18 +86,18 @@ cmsRun runBTagAnalyzer_cfg.py defaults=2016_SF runOnData=False miniAOD=True useT
 
 ### Running BTagAnalyzer on the grid
 Ensure you have a working CMSSW environment, you voms proxy set up and crab setup:
-```
+'''
 cd CMSSW_XXXXX/src/
 cmsenv
 voms-proxy-init --voms cms
 source /cvmfs/cms.cern.ch/crab3/crab.sh
-```
+'''
 - Change into the directory from which you will submit the jobs e.g. ‘CMSSW_8_0_26_patch1/src/RecoBTag/PerformanceMeasurements/test/ttbar/‘
 - Running the following commands will submit the samples described in the data/samples_XXX.json to run on the grid:
-```
+'''
  python submitToGrid.py -j data/samples_Run2018.json-c ${CMSSW_BASE}/src/RecoBTag/PerformanceMeasurements/test/runBTagAnalyzer_cfg.py -l data/Cert_314472-325175_13TeV_PromptReco_Collisions18_JSON.txt -s
- python submitToGrid.py -j data/syst_samples_Run2016_80X_25ns.json -c $ {CMSSW_BASE}/src/RecoBTag/PerformanceMeasurements/test/runBTagAnalyzer_cfg.py -s ```
-```
+ python submitToGrid.py -j data/syst_samples_Run2016_80X_25ns.json -c $ {CMSSW_BASE}/src/RecoBTag/PerformanceMeasurements/test/runBTagAnalyzer_cfg.py -s '''
+'''
 - Partial submission can be made using the option:  -o csv_list
 - In the samples list json, you should consider to leave the names of the MC and data samples as they were originally, with the prefix MC13TeV_ and Data13TeV_, to assure consistency toward all the steps of the measurement.
 - To process more quickly the MC jobs can edit number of units per job.
@@ -106,10 +106,10 @@ source /cvmfs/cms.cern.ch/crab3/crab.sh
 - Githash variable creates the folder where you save the crab output. You can change it into a more friendly name.
 
 ### Copying trees
-```
+'''
  source EosCpDir.sh //For MC samples source
 EosCpDirMuEG.sh //For data samples 
-```
+'''
 UPDATE: For this you can use python script '/src/RecoBTag/PerformanceMeasurements/test/ttbar/scripts/xrdcp_script.py'
         This ensures the TTBar samples are split into training and testing at this stage so the pickle files for the
         luminosity scaling are calculated for the number of events in the split samples.
@@ -121,10 +121,10 @@ UPDATE: For this you can use python script '/src/RecoBTag/PerformanceMeasurement
 - Ensure that the size of the directories are the same for old and copied directory.
 
 ## Pileup estimation
-```
+'''
 cd pileup_weights
 ./runPU.sh
-```
+'''
 
 Script should create a new pileup weights files using the runPileupEstimation.py script here. Will add the weights histogram for each of the simulated samples.
 
@@ -161,9 +161,9 @@ Then just removed all other runs that werent in the list returned by the das que
 
 ## Creation of flat ntuples using TTbarCalib package
 The creation of flat ntuples using the BTagAnalyzer outputs is done using the the runTTbarAnalysis.py script in the TTBarCalib package:
-```
+'''
 python runTTbarAnalysis.py -i /store/group/phys_btag/Commissioning/TTbar/Moriond19_2018_StructuredDir/ -o Moriond19_19-01-24/ -j data/ttbarAnalyser_trainingsamples_Run2017_Summer18Campaign.json -n 50
-```
+'''
 IMPORTANT: Split your ttbar sample to ensure you don't overtrain your classifier. For this you can use python script '/src/RecoBTag/PerformanceMeasurements/test/ttbar/scripts/xrdcp_script.py'
 When you split your ttbar samples up for training/testing BDT purposes, one must delete and remake the pickle files. Currently splits sample 50/50, could potentially use less for training.
 
@@ -193,9 +193,9 @@ rm data/.xsecweights.pck 
   - Check values in getTriggerEfficiency() are up-to-date.
   - Lepton Selection Efficiencies: Currently use 'cutBasedElectronID_Fall17_94X_V1_cff' for electron selection and isTight (=CutBasedIdTight) muon selection. For preliminary results you may have to use an the latest version of the scale factors even if they are a little old. Check here: https://twiki.cern.ch/twiki/bin/view/CMS/Egamma2017DataRecommendations#Electron_Reconstruction_Scale_Fa. Find the .root file for your lepton selection method (cut-based or MVA based) and your working point. Can use new python script to print out values of the pt and eta bins along with the errors that you should add to the appropriate function in TTbarEventAnalysis.cc. Check values in getLeptonSelectionEfficiencyScaleFactor() are match what is printed out.
   - Check lepton scale factors: The scale factors as function of lepton pt and eta. If you need to update these values there is a script already written '/afs/cern.ch/work/j/jthomasw/private/IHEP/BTV/egamma-SFs/' that will produce a .txt with the SF's in. For muons they provide a .json: https://twiki.cern.ch/twiki/bin/view/CMS/MuonWorkInProgressAndPagResults.
-  ```
+  '''
   python calculate_EG_SFs.py > EG_mediumWP_eff_SFs.txt
-  ```
+  '''
   - Check values in TTbarEventAnalysis.cc: getJetResolutionScales() are up-to-date (https://twiki.cern.ch/twiki/bin/viewauth/CMS/JetResolution)
   - Instances of the JEC corrections and uncertainties can be found in TTbarEventAnalysis.h:
     Ensure latest and greatest object corrections e.g. /src/RecoBTag/PerformanceMeasurements/test/ttbar/data/Summer15_25nsV5_DATA_Uncertainty_AK4PFchs.txt
@@ -206,10 +206,10 @@ rm data/.xsecweights.pck 
 
 ## Data Luminosity
 To ensure you aren't missing any data and to find out the integrated luminosity to which you should be scaling MC), one can use the brilcalc tool as demonstrated beneath on the golden json for the 2017 dataset. If it's not 2016 you are looking for one can check here: /afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/CollisionsXX/13TeV/ and look for the relevant .json.
-```
+'''
 export PATH=$HOME/.local/bin:/afs/cern.ch/cms/lumi/brilconda-1.1.7/bin:$PATH
 brilcalc lumi -i /afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions17/13TeV/Final/Cert_294927-306462_13TeV_PromptReco_Collisions17_JSON.txt -u /pb
-```
+'''
 Output for 2017 data:
 Total recorded luminosity: 41860.080
 
@@ -217,24 +217,24 @@ This number is the number to use as the 'lumi' argument when using the plotter.p
 
 ### Running local analysis for 2TagCount
 After b-tag analyzer trees are produced, the first two steps of the 2TagCount analysis are the same.  The first is to run the analysis and make histograms (and trees):
-```
+'''
 python runTTbarAnalysis.py -i /store/group/phys_btag/Commissioning/TTbar/Moriond19_2018_StructuredDir/ --json data/samples_Run2018.json -o /tmp/MYUSERNAME/Moriond19_Run2018 -n 70 --doTwoTag 1
-```
+'''
 
 Re-organize plots and make data, mc comparison canvases (inclusive 2TagCount plots are in):
-```
+'''
 python plotter.py -i /tmp/MYUSERNAME/Moriond19_Run2018 --json data/samples_Run2018.json --lumi 58000
-```
+'''
 
 Take the 2TagCount histograms and compute efficiency scale factor comparing the following: 1)  b-tagging effiency for each working point for events with two b-jets at truth level (MC eff) and 2) data minus non-double b-jet MC divided by the number of MC events with two matched particle level b-jets:
-```
+'''
 python twoTag.py /tmp/MYUSERNAME/Moriond19_Run2018/plots/plotter.root
-```
+'''
 
 ### Train KinDiscriminator
-```
+'''
  sh KIN_runClassifier.sh 
-```
+'''
 - After running the local analysis use the kin tree stored in the ttbar sample to train a kinematics discriminator of ttbar-system b-jets vs. ISR/FSR jets in ttbar events. The script compiles and runs KIN_trainClassifier.C which should be modified in case different trainings are required. 
 - Rearrange new folders created by KIN_runClassifier.sh.
 - Don't forget to split your ttbar sample to ensure you don't overtrain your classifier.
@@ -242,18 +242,18 @@ python twoTag.py /tmp/MYUSERNAME/Moriond19_Run2018/plots/plotter.root
 - One must be aware that changing this number can change the shape of the kinematic discriminant.
 
 ### Re-running flat ntuples to add mva training to TTrees
-```
+'''
  python runTTbarAnalysis.py -i /store/group/phys_btag/Commissioning/TTbar/<ntuples_directory> -o <output_directory> -j data/<samples_list>.json --tmvaWgts data/KIN/ -n 4 
-```
+'''
 - Re-run the analysis to store the KIN discriminator value per jet and merge appropriately.
 - Make sure that the number of root files equals the num of ntuples.
 - Sometimes this is needed because the process ntuples->analysis root file breaks.
 - Need to be careful about the number of nodes you run jobs on. If you use too many it can cause a errors and result in corrupt files..
 
 ## Control plots
- ```
+ '''
 python plotter.py -i output_ntuples_outTheBoxCode_MVA/ -j data/samples_Run2017_prelim_4plotter.json
-```
+'''
  - Makes control plots and stores all in a ROOT file. Different options may be passed to filter plots, and show differently the plots.
 - When merging rootples, be careful because if different sample names are called similarly (eg tW and atW)  you can risk doing double-merging.
 - When scaling to a given luminosity (--lumi) ensure that you enter the luminosity in inverse picobarns i.e. 1000 pb-1 not 1 fb-1.
@@ -265,9 +265,9 @@ python plotter.py -i output_ntuples_outTheBoxCode_MVA/ -j data/samples_Run2017_p
 - The working points are updated most campaigns so ensure you are synchronised with the other BTV calibration methods.
 
 ### Prepare and Perform Fit
-```
+'''
 python Templated_btagEffFitter.py --taggers data/<taggers_WP>.json --inDir output_ntuples_RunBCDEFpuw_addDeepCSV_2018-01-17_MVA/ --outDir fit_dir -n 500
-```
+'''
 - If you already have your templates, use the option '--recycleTemplates'
 - Results of the fits will be stored in the pickle output file (efficiencies and the uncertainties).
 
@@ -302,14 +302,14 @@ python Templated_btagEffFitter.py --taggers data/<taggers_WP>.json --inDir outpu
 - Take the <Tagger_name>.csv file that contains your results.
 - Remove the quotation marks from the values inside the file like before with the kin_calib.csv.
 - Now run the grep command like before to get the values of the systematic variation e.g.
-```
+'''
 cat <Tagger_name>.csv | grep central | awk '{printf "%.12f\n", $11}'
-```
+'''
 - Copy these numbers into an appropriate array in SommaQuadratura.cc like before.
 - At the end of the script you will also see some commented lines of the type:
-```
+'''
 cout << "~~~{\\small \\it total } & ${\\small" << toterr_up << "/ " << toterr_down << "}$ \\\\ " << endl;
-```
+'''
 - Uncomment/write your own version of this line to get the print out you require.
 - Now simply add this to the sfb_report.tex document inside the appropriate table (paying attention to the working points / pt bins etc.).
 
@@ -322,9 +322,9 @@ cout << "~~~{\\small \\it total } & ${\\small" << toterr_up << "/ " << toterr_do
 ### Additional systematic errors
 - Use script 'SommaQuadratura.cc'.
 - Example usage:
-```
+'''
 $> root -l SommaQuadratura.cc
-```
+'''
 - SommaQuadratura.cc is macro can:
   a. Evaluate the relative error of the measurement.
   b. Help to understand how the relative error of the measurement evolves when adding new sys.
@@ -333,9 +333,9 @@ $> root -l SommaQuadratura.cc
 - This script is also useful when you have to use the systematic error of a discriminator (e.g. calculated for the csv) for another discriminator (e.g. cmva). Otherwise these values are taken directly from the measured values of the systematic.
 
 - Also useful:
-```
+'''
 $> ./prepare_OtherSys.sh 
-```
+'''
 
 - Takes as input the values of c. and d. of the previous script . The values of c. have to substitute the current value in the .csv file. The values of d. have to be added to it.
 
@@ -364,23 +364,23 @@ Ensure you have read these and are up-to-date with the run-of-the-mill systemati
 
 In this code, generator weights are stored in the output from the crab jobs (jobs run by the BTagAnalyzer).
 The weights are stored in a ttree branch called 'ttbar_w' which is filled @ around line 1460:
-```
+'''
 CMSSW_X_Y_Z/src/RecoBTag/PerformanceMeasurements/plugins/BTagAnalyzer.cc
-```
+'''
 ### PDF weights in my sample
 
 To know which integer or string corresponds to which weight use the package here:
-```
+'''
 git clone https://github.com/kdlong/TheoreticalUncertainties
-```
+'''
 
 It needs to be used inside a CMSSW environment but otherwise runs pretty well out of the box:
-```
+'''
 python getWeightInfoFromEDMFile.py -f /store/mc/RunIIFall17MiniAOD/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/MINIAODSIM/94X_mc2017_realistic_v10-v1/60000/002E7FEA-16E0-E711-922D-0242AC130002.root
-```
+'''
 
 The printout will take the form:
-```
+'''
 <weightgroup combine="envelope" name="scale_variation">
 <weight id="1001"> muR=1 muF=1 </weight>
 <weight id="1002"> muR=1 muF=2 </weight>
@@ -390,11 +390,11 @@ The printout will take the form:
 <weightgroup combine="hessian" name="PDF_variation">
 <weight id="2001"> PDF set = 260001 </weight>
 <weight id="2002"> PDF set = 260002 </weight>
-```
+'''
 
 So for example, the command above gave me:
 
-```
+'''
 <weightgroup combine="envelope" name="scale_variation">
 <weight id="1001"> lhapdf=306000 renscfact=1d0 facscfact=1d0 </weight>
 <weight id="1002"> lhapdf=306000 renscfact=1d0 facscfact=2d0 </weight>
@@ -406,7 +406,7 @@ So for example, the command above gave me:
 <weight id="2002"> lhapdf=306002 </weight>
 <weight id="2003"> lhapdf=306003 </weight>
 <weight id="2004"> lhapdf=306004 </weight>
-```
+'''
 e.g. Systematic sample: https://cms-pdmv.cern.ch/mcm/requests?range=TOP-RunIIFall17wmLHEGS-00042,TOP-RunIIFall17wmLHEGS-00065&page=0&shown=127
 
 ### nonttXsec Systematic
@@ -419,27 +419,27 @@ To run the non-tt normalisation xsection uncertainty, increase/decrease the x-se
 ## Tips 'n' tricks
 ### Debugging the BTagAnalyzer
 Ensure all the versions of the various packages you are using are correct. You can do this by running the b-tag analyzer interactively from the 'ttbar/test' directory:
-```
+'''
 python -i runBTagAnalyzer_cfg.py defaults=Moriond18 useTTbarFilter=True runFatJets=True miniAOD=True
-```
+'''
 You can then run various process' e.g.
-```
+'''
 process.btagana
-```
+'''
 which will print to screen the EDAnalyzer that is run by that part of the process. The following commands will show you the version of DeepFlavour you are using:
-```
+'''
 process.selectedUpdatedPatJetsPFlow
 process.updatedPatJetsTransientCorrectedPFlow
 process.updatedPatJetsTransientCorrectedPFlow.discriminatorSources
 process.pfDeepFlavourJetTagsPFlow
-```
+'''
 If you want to check the difference between the various defaults you can check the python scripts:
-```
+'''
 diff test/python/defaults/Moriond18.py test/python/defaults/Summer18.py
-```
+'''
 ## CRAB
 'allowNonValidInputDataset' - Add to config and you can run on non-valid datasets e.g.:
-```
+'''
 config_file.write('config.Data.allowNonValidInputDataset=True\n')
-```
+'''
 ##  FIN
