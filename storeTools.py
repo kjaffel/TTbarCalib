@@ -24,8 +24,6 @@ def getEOSlslist(directory, mask='', prepend='root://eoscms.cern.ch'):
     if mask != '':
         stripped_list = [x for x in full_list if mask in x]
         return stripped_list
-    #print 'full files list from eos: ', full_list
-    ## return
     return full_list
 
 """

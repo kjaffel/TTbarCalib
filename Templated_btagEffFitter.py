@@ -82,14 +82,6 @@ def prepareTemplates(tagger,taggerDef,var,varRange,channelList,inDir,outDir):
         nentries=chains[key].GetEntries()
         print 'Starting with %s containing %d entries'%(key,nentries)
 
-        #########################
-        # Test code with smaller number of events
-        #if key == 'mc':
-        #    print 'Total # entries available = ', nentries
-        #    nentries = 6000000
-        #    print 'Using: ', nentries
-        #########################
-
         for i in xrange(0,nentries):
             if i%1 == 0:
                 sys.stdout.write("[%3d/100]\r" % (100*i/float(nentries)))

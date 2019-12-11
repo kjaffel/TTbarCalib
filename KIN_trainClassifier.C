@@ -58,8 +58,7 @@ void KIN_trainClassifier( TString myMethodList = "", TString inputFile="", Int_t
 {
   gSystem->ExpandPathName(inputFile);
 
-  //TString wgtsDir("${CMSSW_BASE}/src/RecoBTag/PerformanceMeasurements/test/ttbar/data/KIN_MVA4000");
-  TString wgtsDir("${CMSSW_BASE}/src/RecoBTag/PerformanceMeasurements/test/ttbar/data/KIN_MVA_2019-01-31");
+  TString wgtsDir("data/KIN_MVA_new");
   gSystem->ExpandPathName(wgtsDir);
   TMVA::gConfig().GetIONames().fWeightFileDir = wgtsDir;
   if(jetRank==LEAD)         TMVA::gConfig().GetIONames().fWeightFileDir += "/leading/";

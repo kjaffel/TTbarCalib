@@ -567,8 +567,6 @@ TTbarFracFitterResult_t TTbarFracFitter::fit(TObjArray &expTemplates, TH1F *data
             return result;
           }
 
-
-
           //
           TTbarFracFitter::~TTbarFracFitter()
           {

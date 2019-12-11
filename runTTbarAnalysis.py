@@ -7,7 +7,7 @@ import pickle
 import math
 from array import array
 from storeTools import *
-from rounding import *
+#from rounding import *
 
 CHANNELS={-11*11:'ll', -13*13:'ll', -11*13:'emu'}
 
@@ -35,8 +35,6 @@ def runTTbarAnalysis(inFile, outFile, wgt, tmvaWgts=None,isData=False):
     from ROOT import TTbarEventAnalysis
     evAnalysis=TTbarEventAnalysis()
 
-
-    print "opt.doTwoTag",opt.doTwoTag
     evAnalysis.setTwoTagCount(opt.doTwoTag)
 
     #MC specifics
@@ -63,12 +61,13 @@ def runTTbarAnalysis(inFile, outFile, wgt, tmvaWgts=None,isData=False):
         evAnalysis.addVarForTMVA(ROOT.TString(v))
     if not (tmvaWgts is None) : evAnalysis.setTMVAWeightsBaseDir(tmvaWgts)
     evAnalysis.prepareOutput(ROOT.TString(outFile))
-    print 'Checking file %s is good . . .' % (ROOT.TString(inFile))
+    
     file_good = evAnalysis.processFile(ROOT.TString(inFile),wgt,isData)
     if file_good == 1:
-        print 'file_good == 1 (is good)'
+        #print 'file_good == 1 (is good)'
         evAnalysis.finalizeOutput()
     else:
+        print 'Checking file %s is good . . .' % (ROOT.TString(inFile))
         print 'file_good == 0 (not good)'
 
 """
@@ -172,7 +171,7 @@ def main():
 
     #read normalization
     xsecWgts, integLumi = {}, {}
-    cache='%s/src/TTBarCalibCode/test/ttbar/data/.xsecweights.pck'%os.environ['CMSSW_BASE']
+    cache='%s/src/TTbarCalib/data/.xsecweights.pck'%os.environ['CMSSW_BASE']
     try:
         cachefile = open(cache, 'r')
         xsecWgts  = pickle.load(cachefile)
