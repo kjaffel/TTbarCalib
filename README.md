@@ -247,10 +247,10 @@ python twoTag.py /tmp/MYUSERNAME/Moriond19_Run2018/plots/plotter.root
 - Re-run the analysis to store the KIN discriminator value per jet and merge appropriately.
 - Make sure that the number of root files equals the num of ntuples.
 - Sometimes this is needed because the process ntuples->analysis root file breaks.
-- Need to be careful about the number of nodes you run jobs on. If you use too many it can cause a errors and result in corrupt files..
+- Need to be careful about the number of nodes you run jobs on. If you use too many it can cause a errors and result in corrupt files.
 ### Control plots
  ```
-      python plotter.py -i <output directory> -j data/<samples 4 plotter>.json
+python plotter.py -i <output directory> -j data/<samples 4 plotter>.json
 ```
  - Makes control plots and stores all in a ROOT file. Different options may be passed to filter plots, and show differently the plots.
 - When merging rootples, be careful because if different sample names are called similarly (eg tW and atW)  you can risk doing double-merging.
