@@ -1,0 +1,144 @@
+[?1034h10pt20
+Eta bin low edge: -1.444000 , eta bin high edge: -0.800000
+Central y-value: 1.033932 , error: 0.014937
+10pt20
+Eta bin low edge: 2.000000 , eta bin high edge: 2.500000
+Central y-value: 1.034314 , error: 0.028160
+10pt20
+Eta bin low edge: -0.800000 , eta bin high edge: 0.000000
+Central y-value: 1.053465 , error: 0.029488
+10pt20
+Eta bin low edge: 1.566000 , eta bin high edge: 2.000000
+Central y-value: 0.996198 , error: 0.019224
+10pt20
+Eta bin low edge: 0.000000 , eta bin high edge: 0.800000
+Central y-value: 1.052838 , error: 0.029141
+10pt20
+Eta bin low edge: 0.800000 , eta bin high edge: 1.444000
+Central y-value: 1.041584 , error: 0.014382
+10pt20
+Eta bin low edge: -2.000000 , eta bin high edge: -1.566000
+Central y-value: 0.966102 , error: 0.019043
+10pt20
+Eta bin low edge: -2.500000 , eta bin high edge: -2.000000
+Central y-value: 1.005115 , error: 0.029196
+20pt35
+Eta bin low edge: -1.444000 , eta bin high edge: -0.800000
+Central y-value: 0.959834 , error: 0.023597
+20pt35
+Eta bin low edge: 2.000000 , eta bin high edge: 2.500000
+Central y-value: 0.925656 , error: 0.013636
+20pt35
+Eta bin low edge: -0.800000 , eta bin high edge: 0.000000
+Central y-value: 0.958445 , error: 0.017297
+20pt35
+Eta bin low edge: 1.566000 , eta bin high edge: 2.000000
+Central y-value: 0.934555 , error: 0.024268
+20pt35
+Eta bin low edge: 0.000000 , eta bin high edge: 0.800000
+Central y-value: 0.962716 , error: 0.017182
+20pt35
+Eta bin low edge: 0.800000 , eta bin high edge: 1.444000
+Central y-value: 0.962343 , error: 0.023761
+20pt35
+Eta bin low edge: -2.000000 , eta bin high edge: -1.566000
+Central y-value: 0.936446 , error: 0.024047
+20pt35
+Eta bin low edge: -2.500000 , eta bin high edge: -2.000000
+Central y-value: 0.926036 , error: 0.013837
+35pt50
+Eta bin low edge: -1.444000 , eta bin high edge: -0.800000
+Central y-value: 0.959255 , error: 0.002178
+35pt50
+Eta bin low edge: 2.000000 , eta bin high edge: 2.500000
+Central y-value: 0.941677 , error: 0.004706
+35pt50
+Eta bin low edge: -0.800000 , eta bin high edge: 0.000000
+Central y-value: 0.963218 , error: 0.002505
+35pt50
+Eta bin low edge: 1.566000 , eta bin high edge: 2.000000
+Central y-value: 0.956670 , error: 0.002734
+35pt50
+Eta bin low edge: 0.000000 , eta bin high edge: 0.800000
+Central y-value: 0.965596 , error: 0.002499
+35pt50
+Eta bin low edge: 0.800000 , eta bin high edge: 1.444000
+Central y-value: 0.963658 , error: 0.002193
+35pt50
+Eta bin low edge: -2.000000 , eta bin high edge: -1.566000
+Central y-value: 0.958904 , error: 0.002737
+35pt50
+Eta bin low edge: -2.500000 , eta bin high edge: -2.000000
+Central y-value: 0.941320 , error: 0.004735
+50pt100
+Eta bin low edge: -1.444000 , eta bin high edge: -0.800000
+Central y-value: 0.963211 , error: 0.002298
+50pt100
+Eta bin low edge: 2.000000 , eta bin high edge: 2.500000
+Central y-value: 0.953917 , error: 0.009894
+50pt100
+Eta bin low edge: -0.800000 , eta bin high edge: 0.000000
+Central y-value: 0.965708 , error: 0.007462
+50pt100
+Eta bin low edge: 1.566000 , eta bin high edge: 2.000000
+Central y-value: 0.971207 , error: 0.012578
+50pt100
+Eta bin low edge: 0.000000 , eta bin high edge: 0.800000
+Central y-value: 0.970166 , error: 0.007453
+50pt100
+Eta bin low edge: 0.800000 , eta bin high edge: 1.444000
+Central y-value: 0.969799 , error: 0.002306
+50pt100
+Eta bin low edge: -2.000000 , eta bin high edge: -1.566000
+Central y-value: 0.965556 , error: 0.012620
+50pt100
+Eta bin low edge: -2.500000 , eta bin high edge: -2.000000
+Central y-value: 0.954756 , error: 0.009963
+100pt200
+Eta bin low edge: -1.444000 , eta bin high edge: -0.800000
+Central y-value: 0.997826 , error: 0.010524
+100pt200
+Eta bin low edge: 2.000000 , eta bin high edge: 2.500000
+Central y-value: 1.003330 , error: 0.015198
+100pt200
+Eta bin low edge: -0.800000 , eta bin high edge: 0.000000
+Central y-value: 0.993492 , error: 0.006462
+100pt200
+Eta bin low edge: 1.566000 , eta bin high edge: 2.000000
+Central y-value: 1.008743 , error: 0.020526
+100pt200
+Eta bin low edge: 0.000000 , eta bin high edge: 0.800000
+Central y-value: 0.997831 , error: 0.006462
+100pt200
+Eta bin low edge: 0.800000 , eta bin high edge: 1.444000
+Central y-value: 0.993492 , error: 0.010502
+100pt200
+Eta bin low edge: -2.000000 , eta bin high edge: -1.566000
+Central y-value: 0.993506 , error: 0.020249
+100pt200
+Eta bin low edge: -2.500000 , eta bin high edge: -2.000000
+Central y-value: 0.985730 , error: 0.014732
+200pt500
+Eta bin low edge: -1.444000 , eta bin high edge: -0.800000
+Central y-value: 0.998932 , error: 0.023643
+200pt500
+Eta bin low edge: 2.000000 , eta bin high edge: 2.500000
+Central y-value: 1.007330 , error: 0.058512
+200pt500
+Eta bin low edge: -0.800000 , eta bin high edge: 0.000000
+Central y-value: 0.991416 , error: 0.030565
+200pt500
+Eta bin low edge: 1.566000 , eta bin high edge: 2.000000
+Central y-value: 0.997843 , error: 0.022350
+200pt500
+Eta bin low edge: 0.000000 , eta bin high edge: 0.800000
+Central y-value: 0.990415 , error: 0.030337
+200pt500
+Eta bin low edge: 0.800000 , eta bin high edge: 1.444000
+Central y-value: 1.018201 , error: 0.023694
+200pt500
+Eta bin low edge: -2.000000 , eta bin high edge: -1.566000
+Central y-value: 0.988260 , error: 0.022267
+200pt500
+Eta bin low edge: -2.500000 , eta bin high edge: -2.000000
+Central y-value: 0.980263 , error: 0.062620
