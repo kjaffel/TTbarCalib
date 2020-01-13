@@ -1,12 +1,10 @@
-from __future__ import division
-from future.modified_builtins import round
-from future import *
 import optparse
 import os,sys
 import json
 import ROOT
 import math
-#from rounding import *
+
+from rounding import *
 
 SYSTCOLORS=[ROOT.kMagenta, ROOT.kRed+1, ROOT.kMagenta+2, ROOT.kAzure+7, ROOT.kMagenta-9, ROOT.kBlue-7]
 
@@ -28,7 +26,6 @@ class Plot(object):
         #self.ratiorange = (0.75,1.25)
 
     def add(self, h, title, color, isData,isSyst):
-        # Set title to name of process
         h.SetTitle(title)
         if isData:
             try:
@@ -37,7 +34,7 @@ class Plot(object):
                 self.dataH=h
                 self.dataH.SetDirectory(0)
                 self.dataH.SetMarkerStyle(20)
-                self.dataH.SetMarkerSize(0.7)
+                self.dataH.SetMarkerSize(1.4)
                 self.dataH.SetMarkerColor(color)
                 self.dataH.SetLineColor(ROOT.kBlack)
                 self.dataH.SetLineWidth(2)
@@ -97,7 +94,7 @@ class Plot(object):
             except:
                 pass
 
-    def show(self, outDir, lumi, noScale=False, saveTeX=False):
+    def show(self, outDir,lumi,noScale=False,saveTeX=False):
 
         if len(self.mc)==0:
             print '%s has no MC!' % self.name
@@ -127,7 +124,7 @@ class Plot(object):
         p1.cd()
 
         # legend
-        leg = ROOT.TLegend(0.5, 0.80-0.03*max(len(self.mc)-2,0), 0.98, 0.9)
+        leg = ROOT.TLegend(0.5, 0.80-0.03*max(len(self.mc)-2,0), 0.98, 0.9)        
         leg.SetBorderSize(0)
         leg.SetFillStyle(0)
         leg.SetTextFont(43)
@@ -138,12 +135,8 @@ class Plot(object):
             if self.data is None: self.finalize()
             leg.AddEntry( self.data, self.data.GetTitle(),'p')
             nlegCols += 1
-
-        # Loop over hist list and scale to lumi accordingly
         for h in self.mc:
-            if not noScale:
-                #print 'scale %s to lumi: %s' % (h,lumi)
-                self.mc[h].Scale(lumi)
+            if not noScale : self.mc[h].Scale(lumi)
             leg.AddEntry(self.mc[h], self.mc[h].GetTitle(), 'f')
             nlegCols += 1
         if nlegCols ==0 :
@@ -155,22 +148,19 @@ class Plot(object):
         totalMC,nominalTTbar = None,None
         stack = ROOT.THStack('mc','mc')
 
-        # Order MC in stack by integral
         #sorted(self.mc, key=lambda histo: histo.Integral())
         from collections import OrderedDict
         self.mc = OrderedDict(sorted(self.mc.items(), key=lambda t: t[1].Integral()))
 
-        # Looping over hists in list and add to stacked hist
         for h in self.mc:
-            stack.Add(self.mc[h],'hist')
-            print 'Adding %s to stack with integral %s' % (h, self.mc[h].Integral())
+            stack.Add(self.mc[h],'hist')            
             try:
                 totalMC.Add(self.mc[h])
             except:
                 totalMC = self.mc[h].Clone('totalmc')
                 self._garbageList.append(totalMC)
                 totalMC.SetDirectory(0)
-            if h=='t#bar{t}':
+            if h=='t#bar{t}': 
                 nominalTTbar= self.mc[h].Clone('nomttbar')
                 self._garbageList.append(nominalTTbar)
                 nominalTTbar.SetDirectory(0)
@@ -191,19 +181,17 @@ class Plot(object):
 
         frame = totalMC.Clone('frame') if totalMC is not None else self.dataH.Clone('frame')
         frame.Reset('ICE')
-        maxY = 1.
-        if totalMC is not None:
-            if maxY < totalMC.GetMaximum():
-                maxY = totalMC.GetMaximum()
-        if self.dataH is not None:
-            if maxY < self.dataH.GetMaximum():
+        if totalMC:
+            maxY = totalMC.GetMaximum() 
+        if self.dataH:
+            if maxY<self.dataH.GetMaximum():
                 maxY=self.dataH.GetMaximum()
         if totalMC and self.dataH:
             print self.name,"data, MC, data/MC",self.dataH.Integral(),totalMC.Integral(),
             if totalMC.Integral()>0:
                 print self.dataH.Integral()/totalMC.Integral(),
             print
-
+      
         frame.GetYaxis().SetRangeUser(0.1,maxY*1.3)
         frame.SetDirectory(0)
         frame.Reset('ICE')
@@ -231,7 +219,7 @@ class Plot(object):
         else:
             txt.DrawLatex(0.2,0.88,'#bf{CMS}')
             txt.DrawLatex(0.2,0.83,'#it{Preliminary}')
-            txt.DrawLatex(0.67,0.97,'%3.1f fb^{-1} (13 TeV)'%(lumi/1000.))
+            txt.DrawLatex(0.67,0.97,'%3.1f fb^{-1} (13 TeV, 25ns)'%(lumi/1000.))
             #txt.DrawLatex(0.18,0.95,'#bf{CMS} #it{preliminary} %3.1f fb^{-1} (13 TeV)' % (lumi/1000.) )
 
         #holds the ratio
@@ -243,8 +231,8 @@ class Plot(object):
         p2.SetTopMargin(0.01)
         p2.SetBottomMargin(0.4)
 
-        p2.SetGridx(True)
-        p2.SetGridy(True)
+        #p2.SetGridx(True)
+        #p2.SetGridy(True)
         self._garbageList.append(p2)
         p2.cd()
         ratioframe=frame.Clone('ratioframe')
@@ -263,15 +251,15 @@ class Plot(object):
                 maxVal=thisValue
             if minVal>thisValue:
                 minVal=thisValue
-
+ 
         print "maxVal,minVal,",maxVal,minVal
         print "range",max(self.ratiorange[0],minVal*0.95), min(self.ratiorange[1],maxVal*1.05)
-
+   
         ratioframe.GetYaxis().SetRangeUser(max(self.ratiorange[0],minVal*0.95), min(self.ratiorange[1],maxVal*1.05))
         #ratioframe.GetYaxis().SetRangeUser(self.ratiorange[0], self.ratiorange[1])
         self._garbageList.append(frame)
-        ratioframe.GetYaxis().SetNdivisions(6)
-        ratioframe.GetYaxis().SetLabelSize(0.18)
+        ratioframe.GetYaxis().SetNdivisions(5)
+        ratioframe.GetYaxis().SetLabelSize(0.18)        
         ratioframe.GetYaxis().SetTitleSize(0.2)
         ratioframe.GetYaxis().SetTitleOffset(0.3)
         ratioframe.GetXaxis().SetLabelSize(0.18)
@@ -289,7 +277,7 @@ class Plot(object):
             leg2.SetTextSize(10)
 
         allGrs=[]
-        try:
+        try:            
             for igr in xrange(0,len(systVariations)):
                 ratio=self.dataH.Clone('ratio')
                 ratio.SetDirectory(0)
@@ -409,6 +397,7 @@ def convertToPoissonErrorGr(h):
     #check https://twiki.cern.ch/twiki/bin/view/CMS/PoissonErrorBars
     alpha = 1 - 0.6827;
     grpois = ROOT.TGraphAsymmErrors(h);
+    #for i in xrange(0,grpois.GetN()+1) :
     for i in xrange(0,grpois.GetN()) :
         N = grpois.GetY()[i]
         if N<200 :
@@ -438,8 +427,7 @@ def main():
     parser.add_option(      '--silent',      dest='silent' ,     help='only dump to ROOT file',         default=False,   action='store_true')
     parser.add_option(      '--saveTeX',     dest='saveTeX' ,    help='save as tex file as well',       default=False,   action='store_true')
     parser.add_option(      '--rebin',       dest='rebin',       help='rebin factor',                   default=1,       type=int)
-    parser.add_option('-l', '--lumi',        dest='lumi' ,       help='lumi to print out',              default=58298.258,    type=float)
-    #parser.add_option('-l', '--lumi',        dest='lumi' ,       help='lumi to print out',              default=52041.789,    type=float)
+    parser.add_option('-l', '--lumi',        dest='lumi' ,       help='lumi to print out',              default=41.6,    type=float)
     parser.add_option(      '--only',        dest='only',        help='plot only these (csv)',          default='',      type='string')
     parser.add_option(      '--outLabel',    dest='outLabel',    help='appends the plots dir name',     default='',      type='string')
     (opt, args) = parser.parse_args()
@@ -456,32 +444,28 @@ def main():
 
     onlyList=opt.only.split(',')
 
-    #read plots
+    #read plots 
     plots={}
     for slist,isSyst in [(samplesList,False),(systSamplesList,True)]:
         if slist is None : continue
-        for tag,sample in slist:
+        for tag,sample in slist: 
 
-            if isSyst and not 't#bar{t}' in sample[3] :
+            if isSyst and not 't#bar{t}' in sample[3] : 
                 print "Skipping syst sample",sample
                 continue
 
             inDir=opt.inDir
-            if isSyst : inDir += '/syst'
-
+            #if isSyst : inDir += '/syst'
             fIn=ROOT.TFile.Open('%s/%s.root' % ( inDir, tag) )
-            print "opening ",'%s/%s.root' % ( inDir, tag)
+            print "opening ",'%s/%s.root' % ( inDir, tag) 
             try:
-                #Loop over histograms
                 for tkey in fIn.GetListOfKeys():
                     key=tkey.GetName()
                     keep=False if len(onlyList)>0 else True
                     for tag in onlyList :
-                        if tag in key:
+                        if tag in key: 
                             keep=True
                     if not keep: continue
-                    if "emu" not in key:
-                        continue
                     obj=fIn.Get(key)
                     if not obj.InheritsFrom('TH1') : continue
                     if not key in plots : plots[key]=Plot(key)
@@ -499,7 +483,7 @@ def main():
     if opt.outLabel:
         outDir=outDir+"_"+opt.outLabel
     os.system('mkdir -p %s' % outDir)
-    for p in plots :
+    for p in plots : 
         if opt.saveLog    : plots[p].savelog=True
         if not opt.silent : plots[p].show(outDir=outDir,lumi=opt.lumi,saveTeX=opt.saveTeX)
         plots[p].appendTo(outDir+'/plotter.root')
@@ -509,9 +493,10 @@ def main():
     print 'Plots and summary ROOT file can be found in %s' % outDir
     print '-'*50
 
-
+        
 """
 for execution from another script
 """
 if __name__ == "__main__":
     sys.exit(main())
+
