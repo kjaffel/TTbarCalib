@@ -3,6 +3,7 @@ import os,sys
 import json
 import ROOT
 import math
+
 from rounding import *
 
 SYSTCOLORS=[ROOT.kMagenta, ROOT.kRed+1, ROOT.kMagenta+2, ROOT.kAzure+7, ROOT.kMagenta-9, ROOT.kBlue-7]
@@ -20,7 +21,7 @@ class Plot(object):
         self.data = None
         self._garbageList = []
         self.plotformats = ['pdf','png']
-        self.savelog = True
+        self.savelog = False
         self.ratiorange = (0.46,1.54)
         #self.ratiorange = (0.75,1.25)
 
