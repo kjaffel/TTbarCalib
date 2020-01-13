@@ -1,5 +1,0 @@
- libCore.so  libRIO.so  libTMVA.so  libPhysics.so  libTree.so  libThread.so  libHist.so  libMatrix.so  libTreePlayer.so  libNet.so  libGenVector.so  libCondFormatsJetMETObjects.so
-# Now the list of classes
-LJKinematics_t
-MyEventInfoBranches_t
-TTbarEventAnalysis
