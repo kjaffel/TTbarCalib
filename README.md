@@ -228,7 +228,7 @@ python plotter.py -i /tmp/MYUSERNAME/Moriond19_Run2018 --json data/samples_Run20
 
 Take the 2TagCount histograms and compute efficiency scale factor comparing the following: 1)  b-tagging effiency for each working point for events with two b-jets at truth level (MC eff) and 2) data minus non-double b-jet MC divided by the number of MC events with two matched particle level b-jets:
 ```
-python twoTag.py /tmp/MYUSERNAME/Moriond19_Run2018/plots/plotter.root
+python TwoTagcountMethodv2.py /tmp/MYUSERNAME/Moriond19_Run2018/plots/plotter.root
 ```
 
 ### Train KinDiscriminator
